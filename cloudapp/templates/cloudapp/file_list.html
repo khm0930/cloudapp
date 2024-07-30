@@ -1,0 +1,27 @@
+{% extends 'cloudapp/base.html' %}
+
+{% block title %}My Files{% endblock %}
+
+{% block content %}
+<h2>My Files</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>File Name</th>
+            <th>Uploaded At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for document in documents %}
+        <tr>
+            <td><a href="{{ document.upload.url }}">{{ document.upload.name }}</a></td>
+            <td>{{ document.uploaded_at }}</td>
+            <td>
+                <a class="btn btn-sm btn-danger" href="{% url 'delete_file' document.id %}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
