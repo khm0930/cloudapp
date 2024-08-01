@@ -29,6 +29,8 @@ urlpatterns = [
     path('cloudapp/', include('cloudapp.urls')),
     path('accounts/', include('django.contrib.auth.urls')),  # Django 내장 인증 URL
     path('', views.home, name='home'),  # 루트 URL 패턴 추가
+    path('cloudapp/', include('cloudapp.urls')),  # cloudapp 앱의 URL 포함
+
 ]
 
 if settings.DEBUG:

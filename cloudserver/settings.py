@@ -81,7 +81,7 @@ DATABASES = {
 	'ENGINE': 'django.db.backends.mysql',
         'NAME': 'cloudserver',
         'USER': 'khm',
-        'PASSWORD': 'asd@0930',
+        'PASSWORD': '0930',
         'HOST': 'localhost',
         'PORT': '3306',
 	
@@ -137,3 +137,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
 	BASE_DIR / "cloudapp" / "static",
 ]
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'home'

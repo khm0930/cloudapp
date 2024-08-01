@@ -3,13 +3,22 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-    <h1 class="display-4">Welcome to CloudApp</h1>
-    <p class="lead">Your personal cloud storage solution. Upload, manage, and share your files securely.</p>
-    <hr class="my-4">
-    <p>Get started by uploading your first file.</p>
-    <a class="btn btn-primary btn-lg" href="{% url 'upload_file' %}" role="button">Upload File</a>
-    {% load static %}
+<div class="container mt-4">
+    <div class="row justify-content-end mb-3">
+        <div class="col-auto">
+            {% if user.is_authenticated %}
+                <span class="navbar-text">Welcome, {{ user.username }}!</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome to CloudApp</h1>
+        <p class="lead">Your personal cloud storage solution. Upload, manage, and share your files securely.</p>
+        <hr class="my-4">
+        <p>Get started by uploading your first file.</p>
+        <a class="btn btn-primary btn-lg" href="{% url 'upload_file' %}" role="button">Upload File</a>
+        {% load static %}
+    </div>
 </div>
 {% endblock %}
-
