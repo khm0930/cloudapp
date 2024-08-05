@@ -1,24 +1,83 @@
 {% extends 'cloudapp/base.html' %}
+{% load static %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Welcome to CloudApp{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{% static "admin/img/cloud-bg.jpg" %}') no-repeat center center;
+        background-size: cover;
+        height: 80vh;
+        display: flex;
+        align-items: center;
+        color: white;
+    }
+    .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #007bff;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="row justify-content-end mb-3">
-        <div class="col-auto">
-            {% if user.is_authenticated %}
-                <span class="navbar-text">Welcome, {{ user.username }}!</span>
-            {% endif %}
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 mb-4">Welcome to CloudApp</h1>
+        <p class="lead mb-5">Your personal cloud storage solution. Secure, fast, and always accessible.</p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'upload_file' %}" class="btn btn-primary btn-lg">Upload File</a>
+        {% else %}
+            <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">Get Started</a>
+        {% endif %}
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-lock feature-icon"></i>
+                    <h3>Secure</h3>
+                    <p>Your files are encrypted and protected.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-bolt feature-icon"></i>
+                    <h3>Fast</h3>
+                    <p>Quick uploads and downloads, anytime.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-share-alt feature-icon"></i>
+                    <h3>Easy Sharing</h3>
+                    <p>Share your files with just a click.</p>
+                </div>
+            </div>
         </div>
     </div>
+</section>
 
-    <div class="jumbotron">
-        <h1 class="display-4">Welcome to CloudApp</h1>
-        <p class="lead">Your personal cloud storage solution. Upload, manage, and share your files securely.</p>
-        <hr class="my-4">
-        <p>Get started by uploading your first file.</p>
-        <a class="btn btn-primary btn-lg" href="{% url 'upload_file' %}" role="button">Upload File</a>
-        {% load static %}
+{% if user.is_authenticated %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Welcome back, {{ user.username }}!</h5>
+                        <p class="card-text">Ready to manage your files? Head to your dashboard or upload a new file.</p>
+                        <a href="{% url 'file_list' %}" class="btn btn-primary mr-2">Go to Dashboard</a>
+                        <a href="{% url 'upload_file' %}" class="btn btn-outline-primary">Upload New File</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</section>
+{% endif %}
 {% endblock %}

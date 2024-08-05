@@ -1,0 +1,42 @@
+{% extends 'cloudapp/base.html' %}
+{% load static %}
+{% block title %}무료 가입{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="d-flex justify-content-start">
+                <a href="{% url 'signup' %}" class="btn btn-link">< 뒤로</a>
+            </div>
+            <h2 class="mb-4 text-center">무료 가입</h2>
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="email" class="form-label">이메일</label>
+                            <input type="email" name="email" class="form-control" value="{{ email }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="first_name" class="form-label">이름</label>
+                            <input type="text" name="first_name" class="form-control" placeholder="이름" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="last_name" class="form-label">성</label>
+                            <input type="text" name="last_name" class="form-control" placeholder="성" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">비밀번호</label>
+                            <input type="password" name="password" class="form-control" placeholder="비밀번호" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">동의 및 가입</button>
+                    </form>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                ‘동의 및 가입’을 선택함으로써 <a href="#">이용 약관</a>과 <a href="#">서비스 약정</a>에 동의합니다.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

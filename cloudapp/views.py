@@ -8,45 +8,62 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login,logout
 from django.contrib import messages
+from django.http import HttpResponse
+from django.contrib.auth.models import User
 
 
 
 def home(request):
     return render(request, 'cloudapp/home.html')
 
+
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            if user is not None:
-                login(request, user)
-                messages.success(request, 'Signup successful! You are now logged in.')
-                return redirect('home')
-            else:
-                messages.error(request, 'Authentication failed. Please try again.')
-    else:
-        form = UserCreationForm()
-    
-    return render(request, 'cloudapp/signup.html', {'form': form})
+        email = request.POST.get('email')
+        if User.objects.filter(email=email).exists():
+            return redirect(f'/cloudapp/login/?email={email}')
+        else:
+            return redirect(f'/cloudapp/signup/details/?email={email}')
+    return render(request, 'cloudapp/signup.html')
 
+def signup_details(request):
+    email = request.GET.get('email')
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password = request.POST.get('password')
+        
+        # 사용자 생성 로직 추가
+        user = User.objects.create_user(username=email, email=email, password=password)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+        
+        user = authenticate(username=email, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, 'Signup successful! You are now logged in.')
+            return redirect('home')
+        else:
+            messages.error(request, 'Authentication failed. Please try again.')
+            return redirect('signup')
+
+    return render(request, 'cloudapp/signup_details.html', {'email': email})
 
 
 def login_view(request):
+    email = request.GET.get('email')
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
+        password = request.POST.get('password')
+        user = authenticate(username=email, password=password)
+        if user is not None:
             login(request, user)
+            messages.success(request, 'Login successful!')
             return redirect('home')
-    else:
-        form = AuthenticationForm()
-    return render(request, 'cloudapp/login.html', {'form': form})
-
-
+        else:
+            messages.error(request, 'Invalid credentials. Please try again.')
+    
+    return render(request, 'cloudapp/login_details.html', {'email': email})
 
 
 @login_required

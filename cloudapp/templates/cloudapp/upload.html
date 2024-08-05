@@ -1,12 +1,74 @@
 {% extends 'cloudapp/base.html' %}
-
 {% block title %}Upload File{% endblock %}
-
+{% block extra_css %}
+<style>
+    .upload-area {
+        border: 2px dashed #007bff;
+        border-radius: 5px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+    }
+    .upload-icon {
+        font-size: 48px;
+        color: #007bff;
+    }
+</style>
+{% endblock %}
 {% block content %}
-<h2>Upload File</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Upload</button>
-</form>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="mb-4">Upload File</h2>
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="upload-area mb-3" id="dropzone">
+                            <i class="fas fa-cloud-upload-alt upload-icon mb-3"></i>
+                            <p>Drag and drop your file here, or click to select a file</p>
+                            {{ form.upload }}
+                        </div>
+                        {% if form.upload.errors %}
+                            <div class="alert alert-danger">
+                                {{ form.upload.errors }}
+                            </div>
+                        {% endif %}
+                        <button type="submit" class="btn btn-primary btn-block">Upload</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.querySelector('input[type="file"]');
+
+    dropzone.addEventListener('click', () => fileInput.click());
+
+    dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('bg-light');
+    });
+
+    dropzone.addEventListener('dragleave', () => {
+        dropzone.classList.remove('bg-light');
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('bg-light');
+        fileInput.files = e.dataTransfer.files;
+    });
+
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            dropzone.querySelector('p').textContent = `Selected file: ${fileInput.files[0].name}`;
+        }
+    });
+</script>
 {% endblock %}
